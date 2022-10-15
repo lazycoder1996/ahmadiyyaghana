@@ -7,15 +7,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/ulule/deepcopier"
-	"gorm.io/gorm"
 )
-
-type ResBody struct {
-	gorm.Model
-	Fullname             string
-	AimsCode             int
-	Zone, Contact, Email string
-}
 
 func CreateAgent(c *gin.Context) {
 	var body models.Agent
@@ -29,31 +21,37 @@ func CreateAgent(c *gin.Context) {
 		c.Status(http.StatusBadRequest)
 		return
 	}
-	resBody := &ResBody{}
-	deepcopier.Copy(body).To(resBody)
 	c.IndentedJSON(http.StatusOK, gin.H{
-		"user": resBody,
+		"agent": body,
 	})
 
 }
 func UpdateAgent(c *gin.Context) {
 	id := c.Param("id")
 
-	var body models.Agent
-	c.Bind(&body)
-	var user models.Agent
-	initializers.DB.First(&user, id)
-	initializers.DB.Model(&user).Updates(models.Agent{
-		Fullname: body.Fullname,
-		Contact:  body.Contact,
-		Password: body.Password,
-		Zone:     body.Zone,
-	})
-	resBody := &ResBody{}
-	deepcopier.Copy(user).To(resBody)
+	var body struct {
+		Fullname             string
+		Password             string
+		AimsCode             int
+		Zone, Contact, Email string
+	}
+
+	if err := c.BindJSON(&body); err != nil {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	updateBody := &models.Agent{}
+	deepcopier.Copy(body).To(updateBody)
+
+	var agent models.Agent
+
+	initializers.DB.First(&agent, id)
+	initializers.DB.Model(&agent).UpdateColumns(&updateBody)
 
 	c.IndentedJSON(http.StatusOK, gin.H{
-		"user": resBody,
+		"agent": agent,
 	})
 
 }
@@ -65,26 +63,18 @@ func DeleteAgent(c *gin.Context) {
 }
 func GetAgent(c *gin.Context) {
 	id := c.Param("id")
-	var user models.Agent
-	initializers.DB.First(&user, id)
-	resBody := &ResBody{}
-	deepcopier.Copy(user).To(resBody)
+	var agent models.Agent
+	initializers.DB.First(&agent, id)
 
 	c.IndentedJSON(http.StatusOK, gin.H{
-		"user": resBody,
+		"agent": agent,
 	})
 }
 
 func GetAgents(c *gin.Context) {
-	var users []models.Agent
-	initializers.DB.Find(&users)
-	var resBody []ResBody
-	for _, user := range users {
-		rb := &ResBody{}
-		deepcopier.Copy(user).To(rb)
-		resBody = append(resBody, *rb)
-	}
+	var agents []models.Agent
+	initializers.DB.Find(&agents)
 	c.IndentedJSON(http.StatusOK, gin.H{
-		"users": resBody,
+		"agents": agents,
 	})
 }
