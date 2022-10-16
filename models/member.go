@@ -1,9 +1,7 @@
 package models
 
-import "gorm.io/gorm"
-
 type Member struct {
-	gorm.Model
+	ID                                       uint   `gorm:"primaryKey"`
 	Fullname, Hometown, Father, Mother, Zone string `binding:"required"`
 	Position, Contact                        string
 	AimsCode                                 uint `gorm:"unique;autoIncrement:false" binding:"required"`
