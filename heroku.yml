@@ -1,2 +1,6 @@
+build:
+  languages:
+    - go
+
 run:
-  web: ./ahmadiyyaghana
+  web: ahmadiyyaghana

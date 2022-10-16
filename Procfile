@@ -1,1 +1,1 @@
-web: ahmadiyyaghana
+web: server
