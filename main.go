@@ -20,5 +20,5 @@ func main() {
 	api.GET("/members/:id", controllers.GetMember)
 	api.PUT("/members/:id", controllers.UpdateMember)
 	api.DELETE("/members/:id", controllers.DeleteMember)
-	r.Run("192.168.9.100:1500")
+	r.Run()
 }
