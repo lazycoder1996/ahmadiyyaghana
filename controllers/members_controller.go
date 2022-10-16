@@ -19,7 +19,7 @@ func CreateMember(c *gin.Context) {
 	}
 	res := initializers.DB.Create(&body)
 	if res.Error != nil {
-		c.Status(http.StatusBadRequest)
+		c.IndentedJSON(http.StatusBadRequest, res.Error.Error())
 		return
 	}
 	c.IndentedJSON(http.StatusOK, gin.H{
@@ -30,8 +30,8 @@ func CreateMember(c *gin.Context) {
 func UpdateMember(c *gin.Context) {
 	id := c.Param("id")
 	var body struct {
-		Name, Hometown, Father, Mother, Position, Contact string
-		Wassiyat, AimsCode                                int
+		Fullname, Hometown, Father, Mother, Position, Contact string
+		Wassiyat, AimsCode                                    int
 	}
 	if err := c.BindJSON(&body); err != nil {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{
@@ -46,9 +46,7 @@ func UpdateMember(c *gin.Context) {
 	initializers.DB.First(&member, id)
 	initializers.DB.Model(&member).UpdateColumns(&updateBody)
 
-	c.IndentedJSON(http.StatusOK, gin.H{
-		"member": member,
-	})
+	c.IndentedJSON(http.StatusOK, member)
 
 }
 func DeleteMember(c *gin.Context) {

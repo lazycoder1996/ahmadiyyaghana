@@ -10,6 +10,5 @@ func init() {
 	initializers.ConnectToDB()
 }
 func main() {
-	initializers.DB.AutoMigrate(&models.Agent{})
-	initializers.DB.AutoMigrate(&models.Member{})
+	initializers.DB.AutoMigrate(&models.Agent{}, &models.Admin{}, &models.Member{}, &models.User{})
 }

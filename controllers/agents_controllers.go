@@ -12,18 +12,20 @@ import (
 func CreateAgent(c *gin.Context) {
 	var body models.Agent
 	if err := c.Bind(&body); err != nil {
-		c.Status(http.StatusBadRequest)
+		c.IndentedJSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
 		return
 
 	}
 	res := initializers.DB.Create(&body)
 	if res.Error != nil {
-		c.Status(http.StatusBadRequest)
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{
+			"error": res.Error,
+		})
 		return
 	}
-	c.IndentedJSON(http.StatusOK, gin.H{
-		"agent": body,
-	})
+	c.IndentedJSON(http.StatusOK, body)
 
 }
 func UpdateAgent(c *gin.Context) {
