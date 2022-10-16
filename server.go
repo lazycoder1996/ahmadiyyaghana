@@ -3,6 +3,7 @@ package main
 import (
 	"ahmadiyyaghana/controllers"
 	"ahmadiyyaghana/initializers"
+	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -14,11 +15,18 @@ func init() {
 }
 
 func main() {
+	r := gin.Default()
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
 	}
-	r := gin.Default()
+	r.LoadHTMLGlob("templates/*.tmpl.html")
+	r.Static("/static", "static")
+
+	r.GET("/", func(ctx *gin.Context) {
+		ctx.HTML(http.StatusOK, "index.tmpl.html", nil)
+
+	})
 	api := r.Group("api")
 	api.POST("/members", controllers.CreateMember)
 	api.GET("/members", controllers.GetMembers)
