@@ -3,7 +3,9 @@ package controllers
 import (
 	"ahmadiyyaghana/initializers"
 	"ahmadiyyaghana/models"
+	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/ulule/deepcopier"
@@ -57,9 +59,12 @@ func DeleteMember(c *gin.Context) {
 }
 
 func GetMember(c *gin.Context) {
-	id := c.Param("id")
+	aimsCode, err := strconv.ParseUint(c.Param("aimscode"), 10, 32)
+	if err != nil {
+		log.Fatalf("error")
+	}
 	var member models.Member
-	initializers.DB.First(&member, id)
+	initializers.DB.Where(&models.Member{AimsCode: uint(aimsCode)}).Find(&member)
 
 	c.IndentedJSON(http.StatusOK, gin.H{
 		"member": member,

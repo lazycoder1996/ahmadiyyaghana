@@ -30,7 +30,7 @@ func main() {
 	api := r.Group("api")
 	api.POST("/members", controllers.CreateMember)
 	api.GET("/members", controllers.GetMembers)
-	api.GET("/members/:id", controllers.GetMember)
+	api.GET("/members/:aimscode", controllers.GetMember)
 	api.PUT("/members/:id", controllers.UpdateMember)
 	api.DELETE("/members/:id", controllers.DeleteMember)
 	r.Run(":" + port)
