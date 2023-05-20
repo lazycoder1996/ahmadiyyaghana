@@ -18,7 +18,7 @@ func main() {
 	r := gin.Default()
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "8080"
+		port = "3000"
 	}
 	r.LoadHTMLGlob("templates/*.tmpl.html")
 	r.Static("/static", "static")
