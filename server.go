@@ -33,5 +33,5 @@ func main() {
 	api.GET("/members/:aimscode", controllers.GetMember)
 	api.PUT("/members/:id", controllers.UpdateMember)
 	api.DELETE("/members/:id", controllers.DeleteMember)
-	r.Run("0:0:0:0:" + port)
+	r.Run("0.0.0.0:" + port)
 }
