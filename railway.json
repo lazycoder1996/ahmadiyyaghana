@@ -5,7 +5,7 @@
   },
   "deploy": {
     "numReplicas": 1,
-    "startCommand": "ahmadiyyaghana",
+    "startCommand": "bin/ahmadiyyaghana.exe",
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 5
   }
